@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#4f46e5" />
-  <title>Trip Expense & Bill Splitter (Saved Trips & Private Accounts Edition)</title>
+  <title>TripTogether — Travel & Expense Splitter</title>
   <style>
     :root {
-      --primary: #4f46e5;
-      --primary-dark: #4338ca;
-      --primary-light: #e0e7ff;
+      --primary: #9b82c8;
+      --primary-dark: #8066b2;
+      --primary-light: #eee7fa;
       --emerald: #059669;
       --emerald-bg: #ecfdf5;
       --emerald-border: #a7f3d0;
@@ -30,7 +30,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--slate-100);
+      background-color: #f5f0fb;
       color: var(--slate-800);
       user-select: none;
       -webkit-tap-highlight-color: transparent;
@@ -46,7 +46,7 @@
       flex-direction: column;
     }
     header {
-      background: linear-gradient(135deg, #4f46e5, #312e81);
+      background: linear-gradient(135deg, #b9a5dc, #8066b2);
       color: #fff;
       padding: 16px 16px 20px;
       border-bottom-left-radius: 24px;
@@ -101,7 +101,7 @@
       gap: 8px;
     }
     .header-title { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.02em; }
-    .header-sub { font-size: 0.72rem; color: #c7d2fe; margin-top: 2px; }
+    .header-sub { font-size: 0.72rem; color: #f2eafb; margin-top: 2px; }
     .btn-row { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
     .btn-small {
       background: rgba(255,255,255,0.18);
@@ -114,8 +114,8 @@
       cursor: pointer;
     }
     .btn-small.highlight {
-      background: #10b981;
-      border-color: #059669;
+      background: #9b82c8;
+      border-color: #8066b2;
       color: #fff;
     }
     .btn-small:active { transform: scale(0.96); }
@@ -171,7 +171,7 @@
     }
     .summary-item { border-right: 1px solid rgba(255,255,255,0.15); padding-right: 6px; }
     .summary-item:last-child { border-right: none; padding-right: 0; }
-    .summary-label { font-size: 0.64rem; text-transform: uppercase; color: #c7d2fe; font-weight: 600; }
+    .summary-label { font-size: 0.64rem; text-transform: uppercase; color: #f2eafb; font-weight: 600; }
     .summary-val { font-size: 1.1rem; font-weight: 800; margin-top: 3px; }
 
     main { padding: 15px; display: flex; flex-direction: column; gap: 15px; }
@@ -369,7 +369,7 @@
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.65);
+      background: rgba(63, 45, 91, 0.48); backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -378,19 +378,20 @@
     }
     .modal-backdrop.show { display: flex; }
     .modal-box {
-      background: #fff;
+      background: linear-gradient(160deg, #fff 0%, #fbf8ff 100%);
       width: 100%;
-      max-width: 370px;
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.22);
+      max-width: 390px;
+      border: 1px solid #e9def8;
+      border-radius: 26px;
+      padding: 24px;
+      box-shadow: 0 24px 65px rgba(91, 67, 130, 0.28);
     }
 
     /* Sign Up / Login Tabs */
     .auth-tabs {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      background: var(--slate-100);
+      background: #f1eafb;
       padding: 4px;
       border-radius: 12px;
       margin-bottom: 14px;
@@ -407,8 +408,8 @@
     }
     .auth-tab.active {
       background: #fff;
-      color: var(--primary);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      color: #8066b2;
+      box-shadow: 0 2px 8px rgba(117,87,157,0.12);
     }
     .auth-error {
       background: var(--rose-bg);
@@ -436,6 +437,9 @@
       display: none;
       box-shadow: 0 8px 20px rgba(0,0,0,0.25);
     }
+
+    .shared-group-help { font-size:.68rem; color:#f2eafb; opacity:.95; width:100%; line-height:1.35; }
+    @media (max-width:380px) { .account-bar { gap:6px; } .account-btn { padding:4px 6px; } .trip-action-btn { padding:7px 6px; } }
   </style>
 </head>
 <body>
@@ -456,7 +460,7 @@
       <div class="header-top">
         <div>
           <div class="header-title">Trip Expense Splitter</div>
-          <div class="header-sub">Private Accounts • Auto-Saves Every Trip</div>
+          <div class="header-sub">Your trips, together • Shared memories</div>
         </div>
         <div class="btn-row">
           <button class="btn-small highlight" onclick="openNewTripModal()">+ New Trip / Day</button>
@@ -467,6 +471,13 @@
       <div class="trip-bar">
         <select id="tripSelector" class="trip-select" onchange="switchTrip(this.value)"></select>
         <button class="trip-action-btn" onclick="renameCurrentTrip()" title="Rename current trip">Rename ✎</button>
+      </div>
+
+      <div class="trip-bar" style="margin-top:-4px;display:flex;flex-wrap:wrap;">
+        <span style="font-size:.78rem;font-weight:800;color:#fff;">👥 Shared group</span>
+        <button class="trip-action-btn" onclick="createSharedGroup()">＋ Create group</button>
+        <button class="trip-action-btn" onclick="joinSharedGroup()">Join with code</button>
+        <select id="sharedGroupSelector" class="trip-select" style="min-width:100%;" onchange="switchSharedGroup(this.value)"><option value="">Personal trips</option></select>
       </div>
 
       <div class="summary-grid">
@@ -556,11 +567,15 @@
 
   <!-- Sign Up / Log In Modal -->
   <div id="authModal" class="modal-backdrop">
-    <div class="modal-box">
+    <div class="modal-box auth-welcome-card">
+      <div style="text-align:center;margin:2px 0 18px;">
+        <div style="width:76px;height:76px;margin:0 auto 12px;border-radius:25px;background:linear-gradient(145deg,#eee5fb,#d9c8f1);display:grid;place-items:center;font-size:2.55rem;box-shadow:0 8px 22px rgba(155,130,200,.22);">✈️</div>
+        <div style="font-size:.68rem;letter-spacing:.19em;text-transform:uppercase;color:#9b82c8;font-weight:900;">TRIPTOGETHER</div>
+      </div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
         <div>
-          <h3 style="font-size:1.08rem;font-weight:800;color:var(--slate-800);">Account Sign Up / Log In</h3>
-          <p style="font-size:0.73rem;color:var(--slate-500);margin-top:2px;">Keep all your trips private & synced across devices</p>
+          <h3 style="font-size:1.18rem;font-weight:850;color:#594574;text-align:center;">Welcome to TripTogether ✈️</h3>
+          <p style="font-size:0.76rem;color:#8d7aa8;margin-top:5px;text-align:center;">Plan little adventures and split every expense together 💜</p>
         </div>
         <button onclick="closeAuthModal()" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--slate-500);">&times;</button>
       </div>
@@ -582,7 +597,7 @@
       </div>
 
       <button id="authSubmitBtn" onclick="submitAuthForm()" class="btn-primary" style="width:100%;padding:12px;font-size:0.9rem;margin-bottom:8px;">
-        Create Account & Save My Trips
+        Create Your Account
       </button>
       <button onclick="closeAuthModal()" style="width:100%;padding:9px;border-radius:12px;border:1px solid var(--slate-200);background:var(--slate-100);font-weight:700;font-size:0.78rem;color:var(--slate-700);cursor:pointer;">
         Continue Without Login
@@ -702,6 +717,9 @@
     let currentUser = null;
     let authMode = 'register';
     let dialogCallback = null;
+    let activeGroupId = localStorage.getItem('trip_splitter_active_group') || '';
+    let lastGroupUpdatedAt = 0;
+    let groupPoller = null;
 
     function showToast(msg) {
       const el = document.getElementById('appToast');
@@ -779,7 +797,7 @@
 
       if (currentUser) {
         labelEl.textContent = '👤 @' + currentUser;
-        badgeEl.textContent = 'Private Account';
+        badgeEl.textContent = activeGroupId ? '👥 Shared Group' : 'Personal';
         authBtn.style.display = 'none';
         logoutBtn.style.display = 'inline-block';
       } else {
@@ -839,47 +857,104 @@
       openAuthModal('register');
     }
 
+    async function loadSharedGroups() {
+      if (!currentUser) return;
+      try {
+        const res = await fetch('/api/groups', { credentials: 'same-origin' });
+        if (!res.ok) return;
+        const data = await res.json();
+        const sel = document.getElementById('sharedGroupSelector');
+        sel.innerHTML = '<option value="">Personal trips</option>' + (data.groups || []).map(g =>
+          `<option value="${g.id}" ${g.id === activeGroupId ? 'selected' : ''}>👥 ${g.name}</option>`).join('');
+        if (activeGroupId && !(data.groups || []).some(g => g.id === activeGroupId)) activeGroupId = '';
+      } catch (_) {}
+    }
+
     async function syncFromServer() {
       if (!currentUser) return;
       loadLocalStateForUser(currentUser);
-      render();
+      await loadSharedGroups();
       try {
-        const res = await fetch('/api/state', { credentials: 'same-origin' });
+        const url = activeGroupId ? `/api/groups/${activeGroupId}/state` : '/api/state';
+        const res = await fetch(url, { credentials: 'same-origin', cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
-          const serverState = data && data.state ? data.state : (data && Array.isArray(data.trips) ? data : null);
-          if (serverState && Array.isArray(serverState.trips) && serverState.trips.length > 0) {
+          const serverState = data && data.state ? data.state : null;
+          if (serverState && Array.isArray(serverState.trips) && serverState.trips.length) {
             appData = serverState;
-            try {
-              localStorage.setItem(getStorageKeyForUser(currentUser), JSON.stringify(appData));
-            } catch (e) {}
-            document.getElementById('syncStatusBadge').textContent = '☁️ Synced';
+            lastGroupUpdatedAt = data.updatedAt || data.savedAt || 0;
+            try { localStorage.setItem(getStorageKeyForUser(currentUser), JSON.stringify(appData)); } catch (_) {}
+            document.getElementById('syncStatusBadge').textContent = activeGroupId ? '👥 Shared' : '☁️ Synced';
             render();
-          } else {
-            // First login/signup for this account: push current local trips to server
-            saveState();
-          }
+          } else if (!activeGroupId) saveState();
         }
-      } catch (e) {}
+      } catch (_) {}
+      updateAccountHeaderUI();
+      if (groupPoller) clearInterval(groupPoller);
+      if (activeGroupId) groupPoller = setInterval(refreshSharedGroup, 4000);
+    }
+
+    async function refreshSharedGroup() {
+      if (!currentUser || !activeGroupId) return;
+      try {
+        const res = await fetch(`/api/groups/${activeGroupId}/state`, { credentials: 'same-origin', cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.updatedAt && data.updatedAt > lastGroupUpdatedAt) {
+          lastGroupUpdatedAt = data.updatedAt;
+          appData = data.state;
+          try { localStorage.setItem(getStorageKeyForUser(currentUser), JSON.stringify(appData)); } catch (_) {}
+          render();
+          document.getElementById('syncStatusBadge').textContent = '👥 Updated';
+        }
+      } catch (_) {}
+    }
+
+    async function switchSharedGroup(groupId) {
+      activeGroupId = groupId || '';
+      try { localStorage.setItem('trip_splitter_active_group', activeGroupId); } catch (_) {}
+      await syncFromServer();
+      render();
+      showToast(activeGroupId ? 'Shared group opened' : 'Personal trips opened');
+    }
+
+    async function createSharedGroup() {
+      if (!currentUser) { openAuthModal('register'); showToast('Please log in first'); return; }
+      openCustomDialog({ title: 'Create a shared group', showInput: true, defaultValue: 'Our Trip', confirmText: 'Create group', onConfirm: async name => {
+        try {
+          const res = await fetch('/api/groups', { method: 'POST', headers: {'Content-Type':'application/json'}, credentials:'same-origin', body: JSON.stringify({name, state: appData}) });
+          const data = await res.json();
+          if (!res.ok) return showToast(data.error || 'Could not create group');
+          activeGroupId = data.group.id;
+          localStorage.setItem('trip_splitter_active_group', activeGroupId);
+          await syncFromServer();
+          render();
+          openCustomDialog({ title: 'Group created! 🎉', message: 'Share this invite code with everyone: ' + data.group.code, showInput: false, confirmText: 'Done' });
+        } catch (_) { showToast('Network error creating group'); }
+      }});
+    }
+
+    async function joinSharedGroup() {
+      if (!currentUser) { openAuthModal('register'); showToast('Please log in first'); return; }
+      openCustomDialog({ title: 'Join a shared group', showInput: true, defaultValue: '', confirmText: 'Join group', onConfirm: async code => {
+        try {
+          const res = await fetch('/api/groups/join', { method: 'POST', headers: {'Content-Type':'application/json'}, credentials:'same-origin', body: JSON.stringify({code}) });
+          const data = await res.json();
+          if (!res.ok) return showToast(data.error || 'Could not join group');
+          activeGroupId = data.group.id;
+          localStorage.setItem('trip_splitter_active_group', activeGroupId);
+          await syncFromServer(); render(); showToast('Joined ' + data.group.name + '!');
+        } catch (_) { showToast('Network error joining group'); }
+      }});
     }
 
     function saveState() {
-      try {
-        localStorage.setItem(getStorageKeyForUser(currentUser), JSON.stringify(appData));
-      } catch (e) {}
-
-      if (currentUser) {
-        fetch('/api/state', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'same-origin',
-          body: JSON.stringify(appData)
-        }).then(res => {
-          if (res.ok) {
-            document.getElementById('syncStatusBadge').textContent = '☁️ Synced';
-          }
-        }).catch(() => {});
-      }
+      try { localStorage.setItem(getStorageKeyForUser(currentUser), JSON.stringify(appData)); } catch (_) {}
+      if (!currentUser) return;
+      const url = activeGroupId ? `/api/groups/${activeGroupId}/state` : '/api/state';
+      fetch(url, { method:'PUT', headers:{'Content-Type':'application/json'}, credentials:'same-origin', body:JSON.stringify(appData) })
+        .then(res => { if (res.ok) document.getElementById('syncStatusBadge').textContent = activeGroupId ? '👥 Shared' : '☁️ Synced'; })
+        .catch(() => {});
     }
 
     function openAuthModal(mode) {
@@ -898,7 +973,7 @@
       document.getElementById('tabRegisterBtn').classList.toggle('active', authMode === 'register');
       document.getElementById('tabLoginBtn').classList.toggle('active', authMode === 'login');
       document.getElementById('authSubmitBtn').textContent =
-        authMode === 'register' ? 'Create Account & Save My Trips' : 'Log In to My Trips';
+        authMode === 'register' ? 'Create Your Account' : 'Welcome Back';
       document.getElementById('authErrorBox').style.display = 'none';
     }
 
@@ -997,6 +1072,8 @@
       } catch (e) {}
       try { localStorage.removeItem(LOCAL_SESSION_KEY); } catch (e) {}
       currentUser = null;
+      activeGroupId = '';
+      if (groupPoller) clearInterval(groupPoller);
       if (!loadLocalStateForUser(null)) {
         appData = createDefaultAppData();
       }

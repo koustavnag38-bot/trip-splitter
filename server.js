@@ -2,7 +2,7 @@
  * Trip Expense Splitter - Backend v2.0 (Node.js, zero dependencies)
  * -----------------------------------------------------------------
  * - Accounts: register / login / logout (passwords hashed with scrypt)
- * - Every user has their own private trips (nobody else can see them)
+ * - Private personal trips plus invitation-code shared group workspaces
  * - Automatically serves `trip_splitter_mobile_app-v3.html` OR `./public/index.html`
  * - Supports Upstash Redis (`UPSTASH_REDIS_REST_URL` & `UPSTASH_REDIS_REST_TOKEN`)
  *   with automatic fallback to `./data/db.json`
@@ -331,6 +331,78 @@ async function handleApi(req, res, pathname) {
 
   if (pathname === '/api/me' && method === 'GET') {
     return sendJson(res, 200, { username });
+  }
+
+  // Shared group workspaces. Membership is checked on every read and write.
+  if (pathname === '/api/groups' && method === 'GET') {
+    const ids = JSON.parse((await store.get('ug:' + username)) || '[]');
+    const groups = [];
+    for (const id of ids) {
+      const raw = await store.get('grp:' + id);
+      if (!raw) continue;
+      try {
+        const g = JSON.parse(raw);
+        groups.push({ id: g.id, name: g.name, code: g.code, owner: g.owner, memberCount: g.members.length });
+      } catch (_) {}
+    }
+    return sendJson(res, 200, { groups });
+  }
+
+  if (pathname === '/api/groups' && method === 'POST') {
+    const body = await parseBody(req);
+    const name = String(body.name || 'Our Trip').trim().slice(0, 60) || 'Our Trip';
+    const personalRaw = await store.get('d:' + username);
+    let initialState = body.state;
+    if (!validState(initialState) && personalRaw) {
+      try { initialState = JSON.parse(personalRaw); } catch (_) { initialState = null; }
+    }
+    if (!validState(initialState)) initialState = null;
+    const id = crypto.randomBytes(12).toString('hex');
+    let code, codeKey;
+    do {
+      code = crypto.randomBytes(4).toString('hex').slice(0, 6).toUpperCase();
+      codeKey = 'gcode:' + code;
+    } while (!(await store.setIfAbsent(codeKey, id)));
+    const group = { id, name, code, owner: username, members: [username], state: initialState, updatedAt: Date.now() };
+    await store.set('grp:' + id, JSON.stringify(group));
+    const ids = JSON.parse((await store.get('ug:' + username)) || '[]');
+    if (!ids.includes(id)) { ids.push(id); await store.set('ug:' + username, JSON.stringify(ids)); }
+    return sendJson(res, 201, { group: { id, name, code, owner: username, memberCount: 1 } });
+  }
+
+  if (pathname === '/api/groups/join' && method === 'POST') {
+    const body = await parseBody(req);
+    const code = String(body.code || '').trim().toUpperCase();
+    if (!/^[A-F0-9]{6}$/.test(code)) return sendJson(res, 400, { error: 'Enter a valid 6-character invite code.' });
+    const id = await store.get('gcode:' + code);
+    if (!id) return sendJson(res, 404, { error: 'That invite code was not found.' });
+    const raw = await store.get('grp:' + id);
+    if (!raw) return sendJson(res, 404, { error: 'This group no longer exists.' });
+    const group = JSON.parse(raw);
+    if (!group.members.includes(username)) group.members.push(username);
+    await store.set('grp:' + id, JSON.stringify(group));
+    const ids = JSON.parse((await store.get('ug:' + username)) || '[]');
+    if (!ids.includes(id)) { ids.push(id); await store.set('ug:' + username, JSON.stringify(ids)); }
+    return sendJson(res, 200, { group: { id: group.id, name: group.name, code: group.code, memberCount: group.members.length } });
+  }
+
+  const groupStateMatch = pathname.match(/^\/api\/groups\/([a-f0-9]{24})\/state$/);
+  if (groupStateMatch && (method === 'GET' || method === 'PUT')) {
+    const id = groupStateMatch[1];
+    const raw = await store.get('grp:' + id);
+    if (!raw) return sendJson(res, 404, { error: 'Group not found.' });
+    const group = JSON.parse(raw);
+    if (!group.members.includes(username)) return sendJson(res, 403, { error: 'You are not a member of this group.' });
+    if (method === 'GET') return sendJson(res, 200, { state: group.state, updatedAt: group.updatedAt, group: { id: group.id, name: group.name, memberCount: group.members.length } });
+    const body = await parseBody(req);
+    if (!validState(body)) return sendJson(res, 400, { error: 'Invalid trips data.' });
+    const state = { activeTripId: typeof body.activeTripId === 'string' ? body.activeTripId : body.trips[0].id, trips: body.trips };
+    const serialized = JSON.stringify(state);
+    if (Buffer.byteLength(serialized) > MAX_STATE_BYTES) return sendJson(res, 413, { error: 'Data is too large.' });
+    group.state = state;
+    group.updatedAt = Date.now();
+    await store.set('grp:' + id, JSON.stringify(group));
+    return sendJson(res, 200, { ok: true, savedAt: group.updatedAt });
   }
 
   if (pathname === '/api/state' && method === 'GET') {
