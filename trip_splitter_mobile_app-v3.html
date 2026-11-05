@@ -3,9 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#4f46e5" />
+  <meta name="theme-color" content="#8066b2" />
+  <meta name="description" content="Plan trips, share expenses, and settle bills together with TripTogether." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="TripTogether" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
   <title>TripTogether — Travel & Expense Splitter</title>
   <style>
+    #installAppBtn { display:none; border:1px solid rgba(255,255,255,.55); background:rgba(255,255,255,.18); color:#fff; border-radius:9px; padding:6px 9px; font-size:.72rem; font-weight:800; cursor:pointer; }
     :root {
       --primary: #9b82c8;
       --primary-dark: #8066b2;
@@ -453,13 +461,14 @@
         </div>
         <div style="display:flex;gap:6px;">
           <button id="authHeaderBtn" class="account-btn" onclick="openAuthModal('register')">Sign Up / Log In</button>
+          <button id="installAppBtn" type="button">⬇ Install App</button>
           <button id="logoutHeaderBtn" class="account-btn" style="display:none;background:rgba(225,29,72,0.35);" onclick="handleLogout()">Logout</button>
         </div>
       </div>
 
       <div class="header-top">
         <div>
-          <div class="header-title">Trip Expense Splitter</div>
+          <div class="header-title">TripTogether</div>
           <div class="header-sub">Your trips, together • Shared memories</div>
         </div>
         <div class="btn-row">
@@ -1487,6 +1496,34 @@
       const toast = document.getElementById('copyToast');
       toast.style.display = 'block';
       setTimeout(() => { toast.style.display = 'none'; }, 2500);
+    }
+
+    // PWA install support. API requests are deliberately not cached by the service worker.
+    let deferredInstallPrompt = null;
+    const installAppBtn = document.getElementById('installAppBtn');
+    window.addEventListener('beforeinstallprompt', (event) => {
+      event.preventDefault();
+      deferredInstallPrompt = event;
+      if (installAppBtn) installAppBtn.style.display = 'inline-flex';
+    });
+    if (installAppBtn) {
+      installAppBtn.addEventListener('click', async () => {
+        if (!deferredInstallPrompt) {
+          alert('To install TripTogether: on Android Chrome, open the browser menu and choose Install app or Add to Home screen. On iPhone, open Share in Safari and choose Add to Home Screen.');
+          return;
+        }
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+        installAppBtn.style.display = 'none';
+      });
+    }
+    window.addEventListener('appinstalled', () => {
+      if (installAppBtn) installAppBtn.style.display = 'none';
+      deferredInstallPrompt = null;
+    });
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('/service-worker.js').catch(err => console.warn('PWA service worker registration failed:', err)));
     }
 
     checkSessionOnLoad();

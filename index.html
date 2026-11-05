@@ -3,20 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Trip Splitter</title>
-  <meta name="theme-color" content="#4f46e5" />
-  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#8066b2" />
+  <meta name="description" content="Plan trips, share expenses, and settle bills together with TripTogether." />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Trip Splitter" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="TripTogether" />
   <link rel="manifest" href="/manifest.webmanifest" />
-  <link rel="icon" type="image/png" href="/icon-192.png" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <title>TripTogether — Travel & Expense Splitter</title>
   <style>
+    #installAppBtn { display:none; border:1px solid rgba(255,255,255,.55); background:rgba(255,255,255,.18); color:#fff; border-radius:9px; padding:6px 9px; font-size:.72rem; font-weight:800; cursor:pointer; }
     :root {
-      --primary: #4f46e5;
-      --primary-dark: #4338ca;
-      --primary-light: #e0e7ff;
+      --primary: #9b82c8;
+      --primary-dark: #8066b2;
+      --primary-light: #eee7fa;
       --emerald: #059669;
       --emerald-bg: #ecfdf5;
       --emerald-border: #a7f3d0;
@@ -35,10 +36,9 @@
       --slate-800: #1e293b;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    input, select, textarea { user-select: text; -webkit-user-select: text; font-family: inherit; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--slate-100);
+      background-color: #f5f0fb;
       color: var(--slate-800);
       user-select: none;
       -webkit-tap-highlight-color: transparent;
@@ -54,13 +54,53 @@
       flex-direction: column;
     }
     header {
-      background: linear-gradient(135deg, #4f46e5, #312e81);
+      background: linear-gradient(135deg, #b9a5dc, #8066b2);
       color: #fff;
-      padding: 18px 16px 20px;
+      padding: 16px 16px 20px;
       border-bottom-left-radius: 24px;
       border-bottom-right-radius: 24px;
       box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
     }
+
+    /* Account / User Bar at Top of Header */
+    .account-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 7px 10px;
+      margin-bottom: 12px;
+      font-size: 0.75rem;
+    }
+    .account-user {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      color: #e0e7ff;
+    }
+    .sync-pill {
+      font-size: 0.66rem;
+      padding: 2px 7px;
+      border-radius: 99px;
+      background: rgba(16, 185, 129, 0.25);
+      border: 1px solid rgba(167, 243, 208, 0.4);
+      color: #d1fae5;
+      font-weight: 700;
+    }
+    .account-btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      padding: 4px 9px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
     .header-top {
       display: flex;
       justify-content: space-between;
@@ -69,7 +109,7 @@
       gap: 8px;
     }
     .header-title { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.02em; }
-    .header-sub { font-size: 0.72rem; color: #c7d2fe; margin-top: 2px; }
+    .header-sub { font-size: 0.72rem; color: #f2eafb; margin-top: 2px; }
     .btn-row { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
     .btn-small {
       background: rgba(255,255,255,0.18);
@@ -82,8 +122,8 @@
       cursor: pointer;
     }
     .btn-small.highlight {
-      background: #10b981;
-      border-color: #059669;
+      background: #9b82c8;
+      border-color: #8066b2;
       color: #fff;
     }
     .btn-small:active { transform: scale(0.96); }
@@ -139,7 +179,7 @@
     }
     .summary-item { border-right: 1px solid rgba(255,255,255,0.15); padding-right: 6px; }
     .summary-item:last-child { border-right: none; padding-right: 0; }
-    .summary-label { font-size: 0.64rem; text-transform: uppercase; color: #c7d2fe; font-weight: 600; }
+    .summary-label { font-size: 0.64rem; text-transform: uppercase; color: #f2eafb; font-weight: 600; }
     .summary-val { font-size: 1.1rem; font-weight: 800; margin-top: 3px; }
 
     main { padding: 15px; display: flex; flex-direction: column; gap: 15px; }
@@ -333,40 +373,11 @@
     }
     .saved-trip-meta { font-size: 0.74rem; color: var(--slate-500); margin-top: 2px; }
 
-    /* Login screen */
-    .auth-backdrop {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(135deg, #4f46e5, #312e81);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-      z-index: 200;
-    }
-    .auth-backdrop.show { display: flex; }
-    .auth-box {
-      background: #fff;
-      width: 100%;
-      max-width: 360px;
-      border-radius: 22px;
-      padding: 24px 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-    }
-    .auth-logo { font-size: 2.2rem; text-align: center; }
-    .auth-title { text-align: center; font-size: 1.25rem; font-weight: 800; margin-top: 4px; }
-    .auth-sub { text-align: center; font-size: 0.78rem; color: var(--slate-500); margin: 4px 0 16px; }
-    .auth-label { display: block; font-size: 0.72rem; font-weight: 700; color: var(--slate-500); text-transform: uppercase; margin-bottom: 4px; }
-    .auth-error { color: var(--rose); background: var(--rose-bg); border: 1px solid var(--rose-border); font-size: 0.8rem; font-weight: 600; padding: 8px 10px; border-radius: 10px; margin-bottom: 12px; display: none; }
-    .auth-switch { text-align: center; font-size: 0.8rem; color: var(--slate-500); margin-top: 14px; }
-    .auth-switch a { color: var(--primary); font-weight: 800; cursor: pointer; }
-    .sync-status { font-size: 0.68rem; color: #c7d2fe; margin-top: 2px; }
-
-    /* Modal */
+    /* Modals */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(63, 45, 91, 0.48); backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -375,27 +386,93 @@
     }
     .modal-backdrop.show { display: flex; }
     .modal-box {
-      background: #fff;
+      background: linear-gradient(160deg, #fff 0%, #fbf8ff 100%);
       width: 100%;
-      max-width: 360px;
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      max-width: 390px;
+      border: 1px solid #e9def8;
+      border-radius: 26px;
+      padding: 24px;
+      box-shadow: 0 24px 65px rgba(91, 67, 130, 0.28);
     }
+
+    /* Sign Up / Login Tabs */
+    .auth-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #f1eafb;
+      padding: 4px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+    }
+    .auth-tab {
+      border: none;
+      background: transparent;
+      padding: 8px;
+      border-radius: 9px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--slate-500);
+      cursor: pointer;
+    }
+    .auth-tab.active {
+      background: #fff;
+      color: #8066b2;
+      box-shadow: 0 2px 8px rgba(117,87,157,0.12);
+    }
+    .auth-error {
+      background: var(--rose-bg);
+      color: var(--rose);
+      border: 1px solid var(--rose-border);
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .toast-banner {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--slate-800);
+      color: #fff;
+      padding: 9px 16px;
+      border-radius: 99px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      z-index: 200;
+      display: none;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    }
+
+    .shared-group-help { font-size:.68rem; color:#f2eafb; opacity:.95; width:100%; line-height:1.35; }
+    @media (max-width:380px) { .account-bar { gap:6px; } .account-btn { padding:4px 6px; } .trip-action-btn { padding:7px 6px; } }
   </style>
 </head>
 <body>
   <div class="app-shell">
     <header>
+      <!-- Top Account Bar (Sign Up / Log In / Private User Status) -->
+      <div class="account-bar">
+        <div class="account-user">
+          <span id="accountLabel">👤 Guest Mode</span>
+          <span id="syncStatusBadge" class="sync-pill">Local</span>
+        </div>
+        <div style="display:flex;gap:6px;">
+          <button id="authHeaderBtn" class="account-btn" onclick="openAuthModal('register')">Sign Up / Log In</button>
+          <button id="installAppBtn" type="button">⬇ Install App</button>
+          <button id="logoutHeaderBtn" class="account-btn" style="display:none;background:rgba(225,29,72,0.35);" onclick="handleLogout()">Logout</button>
+        </div>
+      </div>
+
       <div class="header-top">
         <div>
-          <div class="header-title">Trip Expense Splitter</div>
-          <div class="header-sub">Auto-Saves Every Trip • Never Loses Old Data</div>
-          <div id="syncStatus" class="sync-status"></div>
+          <div class="header-title">TripTogether</div>
+          <div class="header-sub">Your trips, together • Shared memories</div>
         </div>
         <div class="btn-row">
           <button class="btn-small highlight" onclick="openNewTripModal()">+ New Trip / Day</button>
-          <button class="btn-small" onclick="logout()">Log out</button>
         </div>
       </div>
 
@@ -403,6 +480,13 @@
       <div class="trip-bar">
         <select id="tripSelector" class="trip-select" onchange="switchTrip(this.value)"></select>
         <button class="trip-action-btn" onclick="renameCurrentTrip()" title="Rename current trip">Rename ✎</button>
+      </div>
+
+      <div class="trip-bar" style="margin-top:-4px;display:flex;flex-wrap:wrap;">
+        <span style="font-size:.78rem;font-weight:800;color:#fff;">👥 Shared group</span>
+        <button class="trip-action-btn" onclick="createSharedGroup()">＋ Create group</button>
+        <button class="trip-action-btn" onclick="joinSharedGroup()">Join with code</button>
+        <select id="sharedGroupSelector" class="trip-select" style="min-width:100%;" onchange="switchSharedGroup(this.value)"><option value="">Personal trips</option></select>
       </div>
 
       <div class="summary-grid">
@@ -490,24 +574,44 @@
     </main>
   </div>
 
-  <!-- Login / Create account -->
-  <div id="authScreen" class="auth-backdrop">
-    <form class="auth-box" onsubmit="submitAuth(event)" autocomplete="on">
-      <div class="auth-logo">🧳</div>
-      <div class="auth-title">Trip Splitter</div>
-      <div id="authSub" class="auth-sub">Log in to see your private trips</div>
-      <div id="authError" class="auth-error"></div>
+  <!-- Sign Up / Log In Modal -->
+  <div id="authModal" class="modal-backdrop">
+    <div class="modal-box auth-welcome-card">
+      <div style="text-align:center;margin:2px 0 18px;">
+        <div style="width:76px;height:76px;margin:0 auto 12px;border-radius:25px;background:linear-gradient(145deg,#eee5fb,#d9c8f1);display:grid;place-items:center;font-size:2.55rem;box-shadow:0 8px 22px rgba(155,130,200,.22);">✈️</div>
+        <div style="font-size:.68rem;letter-spacing:.19em;text-transform:uppercase;color:#9b82c8;font-weight:900;">TRIPTOGETHER</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div>
+          <h3 style="font-size:1.18rem;font-weight:850;color:#594574;text-align:center;">Welcome to TripTogether ✈️</h3>
+          <p style="font-size:0.76rem;color:#8d7aa8;margin-top:5px;text-align:center;">Plan little adventures and split every expense together 💜</p>
+        </div>
+        <button onclick="closeAuthModal()" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--slate-500);">&times;</button>
+      </div>
+
+      <div class="auth-tabs">
+        <button id="tabRegisterBtn" class="auth-tab active" onclick="switchAuthTab('register')">Create an Account</button>
+        <button id="tabLoginBtn" class="auth-tab" onclick="switchAuthTab('login')">Log In</button>
+      </div>
+
+      <div id="authErrorBox" class="auth-error"></div>
+
       <div style="margin-bottom:12px;">
-        <label class="auth-label" for="authUser">Username</label>
-        <input id="authUser" class="text-input" style="width:100%;" type="text" name="username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="e.g. koustav" required />
+        <label style="display:block;font-size:0.72rem;font-weight:700;color:var(--slate-500);text-transform:uppercase;margin-bottom:4px;">Username</label>
+        <input id="authUsernameInput" class="text-input" style="width:100%;font-weight:700;" type="text" autocomplete="username" placeholder="e.g. suvo_123 (3–30 letters/numbers)" />
       </div>
       <div style="margin-bottom:16px;">
-        <label class="auth-label" for="authPass">Password</label>
-        <input id="authPass" class="text-input" style="width:100%;" type="password" name="password" autocomplete="current-password" placeholder="At least 6 characters" required />
+        <label style="display:block;font-size:0.72rem;font-weight:700;color:var(--slate-500);text-transform:uppercase;margin-bottom:4px;">Password</label>
+        <input id="authPasswordInput" class="text-input" style="width:100%;font-weight:700;" type="password" autocomplete="current-password" placeholder="At least 6 characters" />
       </div>
-      <button id="authBtn" type="submit" class="btn-primary" style="width:100%;padding:12px;">Log in</button>
-      <div id="authSwitch" class="auth-switch"></div>
-    </form>
+
+      <button id="authSubmitBtn" onclick="submitAuthForm()" class="btn-primary" style="width:100%;padding:12px;font-size:0.9rem;margin-bottom:8px;">
+        Create Your Account
+      </button>
+      <button onclick="closeAuthModal()" style="width:100%;padding:9px;border-radius:12px;border:1px solid var(--slate-200);background:var(--slate-100);font-weight:700;font-size:0.78rem;color:var(--slate-700);cursor:pointer;">
+        Continue Without Login
+      </button>
+    </div>
   </div>
 
   <!-- Add Expense Modal -->
@@ -532,7 +636,7 @@
     </div>
   </div>
 
-  <!-- Create New Trip Modal (Without Erasing Old Trips) -->
+  <!-- Create New Trip Modal -->
   <div id="newTripModal" class="modal-backdrop">
     <div class="modal-box">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
@@ -562,47 +666,118 @@
     </div>
   </div>
 
-  <script>
-    // Old key used when the app ran as a plain HTML file (migrated once into your first account)
-    const LEGACY_KEY = 'trip_splitter_multi_trips_v3';
-    const LAST_USER_KEY = 'trip_splitter_last_user';
+  <!-- Generic Input / Confirm Modal (Replaces blocked browser prompt/confirm) -->
+  <div id="customDialogModal" class="modal-backdrop">
+    <div class="modal-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 id="customDialogTitle" style="font-size:1.02rem;font-weight:800;">Update</h3>
+        <button onclick="closeCustomDialog()" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--slate-500);">&times;</button>
+      </div>
+      <p id="customDialogMessage" style="font-size:0.82rem;color:var(--slate-700);margin-bottom:12px;display:none;"></p>
+      <div id="customDialogInputWrap" style="margin-bottom:16px;">
+        <input id="customDialogInput" class="text-input" style="width:100%;font-weight:700;" type="text" />
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button onclick="closeCustomDialog()" style="flex:1;padding:10px;border-radius:12px;border:1px solid var(--slate-200);background:var(--slate-100);font-weight:700;cursor:pointer;">Cancel</button>
+        <button id="customDialogConfirmBtn" onclick="confirmCustomDialog()" class="btn-primary" style="flex:1;">Confirm</button>
+      </div>
+    </div>
+  </div>
 
-    function esc(s) {
-      return String(s == null ? '' : s)
-        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-    }
+  <div id="appToast" class="toast-banner"></div>
+
+  <script>
+    const STORAGE_KEY_V3 = 'trip_splitter_multi_trips_v3';
+    const LOCAL_ACCOUNTS_KEY = 'trip_splitter_local_accounts_v2';
+    const LOCAL_SESSION_KEY = 'trip_splitter_active_user_v2';
 
     function formatTodayDate() {
       const d = new Date();
       return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
     }
 
-    function makeDefaultData() { return {
-      activeTripId: 'trip_1',
-      trips: [
-        {
-          id: 'trip_1',
-          title: 'Trip #1 (Sample)',
-          createdAt: formatTodayDate(),
-          members: [
-            { id: '1', name: 'A' },
-            { id: '2', name: 'B' },
-            { id: '3', name: 'C' },
-            { id: '4', name: 'D' }
-          ],
-          expenses: [
-            { id: 'e1', memberId: '1', amount: 3200, note: 'Hotel Booking' },
-            { id: 'e2', memberId: '2', amount: 1400, note: 'Cab & Fuel' },
-            { id: 'e3', memberId: '3', amount: 1800, note: 'Dinner & Lunch' },
-            { id: 'e4', memberId: '4', amount: 400, note: 'Snacks & Tea' }
-          ]
-        }
-      ]
-    }; }
+    function createDefaultAppData() {
+      return {
+        activeTripId: 'trip_1',
+        trips: [
+          {
+            id: 'trip_1',
+            title: 'Trip #1 (Sample)',
+            createdAt: formatTodayDate(),
+            members: [
+              { id: '1', name: 'A' },
+              { id: '2', name: 'B' },
+              { id: '3', name: 'C' },
+              { id: '4', name: 'D' }
+            ],
+            expenses: [
+              { id: 'e1', memberId: '1', amount: 3200, note: 'Hotel Booking' },
+              { id: 'e2', memberId: '2', amount: 1400, note: 'Cab & Fuel' },
+              { id: 'e3', memberId: '3', amount: 1800, note: 'Dinner & Lunch' },
+              { id: 'e4', memberId: '4', amount: 400, note: 'Snacks & Tea' }
+            ]
+          }
+        ]
+      };
+    }
 
-    let appData = makeDefaultData();
+    let appData = createDefaultAppData();
     let activeMemberId = null;
+    let currentUser = null;
+    let authMode = 'register';
+    let dialogCallback = null;
+    let activeGroupId = localStorage.getItem('trip_splitter_active_group') || '';
+    let lastGroupUpdatedAt = 0;
+    let groupPoller = null;
+
+    function showToast(msg) {
+      const el = document.getElementById('appToast');
+      el.textContent = msg;
+      el.style.display = 'block';
+      setTimeout(() => { el.style.display = 'none'; }, 2400);
+    }
+
+    function openCustomDialog(opts) {
+      document.getElementById('customDialogTitle').textContent = opts.title || 'Update';
+      const msgEl = document.getElementById('customDialogMessage');
+      if (opts.message) {
+        msgEl.textContent = opts.message;
+        msgEl.style.display = 'block';
+      } else {
+        msgEl.style.display = 'none';
+      }
+      const inputWrap = document.getElementById('customDialogInputWrap');
+      const inputEl = document.getElementById('customDialogInput');
+      if (opts.showInput) {
+        inputWrap.style.display = 'block';
+        inputEl.type = opts.inputType || 'text';
+        inputEl.value = opts.defaultValue != null ? String(opts.defaultValue) : '';
+      } else {
+        inputWrap.style.display = 'none';
+      }
+      document.getElementById('customDialogConfirmBtn').textContent = opts.confirmText || 'Save';
+      dialogCallback = opts.onConfirm || null;
+      document.getElementById('customDialogModal').classList.add('show');
+      if (opts.showInput) {
+        setTimeout(() => inputEl.focus(), 50);
+      }
+    }
+
+    function closeCustomDialog() {
+      document.getElementById('customDialogModal').classList.remove('show');
+      dialogCallback = null;
+    }
+
+    function confirmCustomDialog() {
+      const val = document.getElementById('customDialogInput').value;
+      const cb = dialogCallback;
+      closeCustomDialog();
+      if (typeof cb === 'function') cb(val);
+    }
+
+    function getStorageKeyForUser(username) {
+      return username ? (STORAGE_KEY_V3 + '_u_' + username) : STORAGE_KEY_V3;
+    }
 
     function getCurrentTrip() {
       let found = appData.trips.find(t => t.id === appData.activeTripId);
@@ -623,200 +798,297 @@
       return label;
     }
 
-    // ------------------------------------------------------------------
-    // Accounts + syncing with the server
-    // ------------------------------------------------------------------
-    let currentUser = null;
-    let authMode = 'login';
-    let syncTimer = null;
-    let syncing = false;
+    function updateAccountHeaderUI() {
+      const labelEl = document.getElementById('accountLabel');
+      const badgeEl = document.getElementById('syncStatusBadge');
+      const authBtn = document.getElementById('authHeaderBtn');
+      const logoutBtn = document.getElementById('logoutHeaderBtn');
 
-    const cacheKey = () => 'trip_splitter_cache_' + currentUser;
-    const dirtyKey = () => 'trip_splitter_dirty_' + currentUser;
-
-    async function api(method, url, body) {
-      const opts = { method, credentials: 'same-origin', headers: {} };
-      if (body !== undefined) {
-        opts.headers['Content-Type'] = 'application/json';
-        opts.body = JSON.stringify(body);
+      if (currentUser) {
+        labelEl.textContent = '👤 @' + currentUser;
+        badgeEl.textContent = activeGroupId ? '👥 Shared Group' : 'Personal';
+        authBtn.style.display = 'none';
+        logoutBtn.style.display = 'inline-block';
+      } else {
+        labelEl.textContent = '👤 Guest Mode';
+        badgeEl.textContent = 'Local Only';
+        authBtn.style.display = 'inline-block';
+        logoutBtn.style.display = 'none';
       }
-      const r = await fetch(url, opts);
-      let data = null;
-      try { data = await r.json(); } catch (e) {}
-      return { ok: r.ok, status: r.status, data };
     }
 
-    function setSyncStatus(text) {
-      const el = document.getElementById('syncStatus');
-      if (el) el.textContent = (currentUser ? '👤 ' + currentUser : '') + (text ? ' • ' + text : '');
+    function loadLocalStateForUser(username) {
+      try {
+        const key = getStorageKeyForUser(username);
+        const saved = localStorage.getItem(key);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && Array.isArray(parsed.trips) && parsed.trips.length > 0) {
+            appData = parsed;
+            return true;
+          }
+        }
+      } catch (e) {}
+      return false;
     }
 
-    function validData(d) {
-      return d && Array.isArray(d.trips) && d.trips.length > 0;
+    async function checkSessionOnLoad() {
+      loadLocalStateForUser(null);
+      render();
+
+      try {
+        const res = await fetch('/api/me', { credentials: 'same-origin' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.username) {
+            currentUser = data.username;
+            updateAccountHeaderUI();
+            await syncFromServer();
+            return;
+          }
+        }
+      } catch (e) {
+        // Running offline or in Canvas preview: check local session
+      }
+
+      try {
+        const localUser = localStorage.getItem(LOCAL_SESSION_KEY);
+        if (localUser) {
+          currentUser = localUser;
+          loadLocalStateForUser(currentUser);
+          updateAccountHeaderUI();
+          render();
+          return;
+        }
+      } catch (e) {}
+
+      updateAccountHeaderUI();
+      openAuthModal('register');
+    }
+
+    async function loadSharedGroups() {
+      if (!currentUser) return;
+      try {
+        const res = await fetch('/api/groups', { credentials: 'same-origin' });
+        if (!res.ok) return;
+        const data = await res.json();
+        const sel = document.getElementById('sharedGroupSelector');
+        sel.innerHTML = '<option value="">Personal trips</option>' + (data.groups || []).map(g =>
+          `<option value="${g.id}" ${g.id === activeGroupId ? 'selected' : ''}>👥 ${g.name}</option>`).join('');
+        if (activeGroupId && !(data.groups || []).some(g => g.id === activeGroupId)) activeGroupId = '';
+      } catch (_) {}
+    }
+
+    async function syncFromServer() {
+      if (!currentUser) return;
+      loadLocalStateForUser(currentUser);
+      await loadSharedGroups();
+      try {
+        const url = activeGroupId ? `/api/groups/${activeGroupId}/state` : '/api/state';
+        const res = await fetch(url, { credentials: 'same-origin', cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          const serverState = data && data.state ? data.state : null;
+          if (serverState && Array.isArray(serverState.trips) && serverState.trips.length) {
+            appData = serverState;
+            lastGroupUpdatedAt = data.updatedAt || data.savedAt || 0;
+            try { localStorage.setItem(getStorageKeyForUser(currentUser), JSON.stringify(appData)); } catch (_) {}
+            document.getElementById('syncStatusBadge').textContent = activeGroupId ? '👥 Shared' : '☁️ Synced';
+            render();
+          } else if (!activeGroupId) saveState();
+        }
+      } catch (_) {}
+      updateAccountHeaderUI();
+      if (groupPoller) clearInterval(groupPoller);
+      if (activeGroupId) groupPoller = setInterval(refreshSharedGroup, 4000);
+    }
+
+    async function refreshSharedGroup() {
+      if (!currentUser || !activeGroupId) return;
+      try {
+        const res = await fetch(`/api/groups/${activeGroupId}/state`, { credentials: 'same-origin', cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.updatedAt && data.updatedAt > lastGroupUpdatedAt) {
+          lastGroupUpdatedAt = data.updatedAt;
+          appData = data.state;
+          try { localStorage.setItem(getStorageKeyForUser(currentUser), JSON.stringify(appData)); } catch (_) {}
+          render();
+          document.getElementById('syncStatusBadge').textContent = '👥 Updated';
+        }
+      } catch (_) {}
+    }
+
+    async function switchSharedGroup(groupId) {
+      activeGroupId = groupId || '';
+      try { localStorage.setItem('trip_splitter_active_group', activeGroupId); } catch (_) {}
+      await syncFromServer();
+      render();
+      showToast(activeGroupId ? 'Shared group opened' : 'Personal trips opened');
+    }
+
+    async function createSharedGroup() {
+      if (!currentUser) { openAuthModal('register'); showToast('Please log in first'); return; }
+      openCustomDialog({ title: 'Create a shared group', showInput: true, defaultValue: 'Our Trip', confirmText: 'Create group', onConfirm: async name => {
+        try {
+          const res = await fetch('/api/groups', { method: 'POST', headers: {'Content-Type':'application/json'}, credentials:'same-origin', body: JSON.stringify({name, state: appData}) });
+          const data = await res.json();
+          if (!res.ok) return showToast(data.error || 'Could not create group');
+          activeGroupId = data.group.id;
+          localStorage.setItem('trip_splitter_active_group', activeGroupId);
+          await syncFromServer();
+          render();
+          openCustomDialog({ title: 'Group created! 🎉', message: 'Share this invite code with everyone: ' + data.group.code, showInput: false, confirmText: 'Done' });
+        } catch (_) { showToast('Network error creating group'); }
+      }});
+    }
+
+    async function joinSharedGroup() {
+      if (!currentUser) { openAuthModal('register'); showToast('Please log in first'); return; }
+      openCustomDialog({ title: 'Join a shared group', showInput: true, defaultValue: '', confirmText: 'Join group', onConfirm: async code => {
+        try {
+          const res = await fetch('/api/groups/join', { method: 'POST', headers: {'Content-Type':'application/json'}, credentials:'same-origin', body: JSON.stringify({code}) });
+          const data = await res.json();
+          if (!res.ok) return showToast(data.error || 'Could not join group');
+          activeGroupId = data.group.id;
+          localStorage.setItem('trip_splitter_active_group', activeGroupId);
+          await syncFromServer(); render(); showToast('Joined ' + data.group.name + '!');
+        } catch (_) { showToast('Network error joining group'); }
+      }});
     }
 
     function saveState() {
+      try { localStorage.setItem(getStorageKeyForUser(currentUser), JSON.stringify(appData)); } catch (_) {}
       if (!currentUser) return;
-      try {
-        localStorage.setItem(cacheKey(), JSON.stringify(appData));
-        localStorage.setItem(dirtyKey(), '1');
-      } catch (e) {}
-      setSyncStatus('Saving…');
-      clearTimeout(syncTimer);
-      syncTimer = setTimeout(pushState, 500);
+      const url = activeGroupId ? `/api/groups/${activeGroupId}/state` : '/api/state';
+      fetch(url, { method:'PUT', headers:{'Content-Type':'application/json'}, credentials:'same-origin', body:JSON.stringify(appData) })
+        .then(res => { if (res.ok) document.getElementById('syncStatusBadge').textContent = activeGroupId ? '👥 Shared' : '☁️ Synced'; })
+        .catch(() => {});
     }
 
-    async function pushState() {
-      if (!currentUser || syncing) { if (syncing) { clearTimeout(syncTimer); syncTimer = setTimeout(pushState, 700); } return; }
-      syncing = true;
-      try {
-        const res = await api('PUT', '/api/state', appData);
-        if (res.ok) {
-          // only clear the flag if nothing changed while we were saving
-          if (!syncTimer) { try { localStorage.removeItem(dirtyKey()); } catch (e) {} }
-          setSyncStatus('Saved ✓');
-        } else if (res.status === 401) {
-          showAuth('Your session ended. Please log in again.');
-        } else {
-          setSyncStatus('Could not save – will retry');
-        }
-      } catch (e) {
-        setSyncStatus('Offline – will sync later');
-      }
-      syncing = false;
+    function openAuthModal(mode) {
+      switchAuthTab(mode || 'register');
+      document.getElementById('authErrorBox').style.display = 'none';
+      document.getElementById('authModal').classList.add('show');
+      setTimeout(() => document.getElementById('authUsernameInput').focus(), 50);
     }
 
-    window.addEventListener('online', () => {
-      if (currentUser && localStorage.getItem(dirtyKey())) pushState();
-    });
-
-    async function startApp(username) {
-      currentUser = username;
-      try { localStorage.setItem(LAST_USER_KEY, username); } catch (e) {}
-      document.getElementById('authScreen').classList.remove('show');
-
-      let loaded = null;
-      let hasUnsynced = false;
-      try { hasUnsynced = !!localStorage.getItem(dirtyKey()); } catch (e) {}
-      let cached = null;
-      try { cached = JSON.parse(localStorage.getItem(cacheKey()) || 'null'); } catch (e) {}
-
-      let serverOk = false;
-      try {
-        const res = await api('GET', '/api/state');
-        if (res.status === 401) { showAuth('Please log in.'); return; }
-        if (res.ok) {
-          serverOk = true;
-          if (hasUnsynced && validData(cached)) loaded = cached;       // newer changes made offline
-          else if (res.data && validData(res.data.state)) loaded = res.data.state;
-        }
-      } catch (e) {}
-
-      if (!loaded && !serverOk && validData(cached)) loaded = cached;  // offline: use saved copy
-
-      let needPush = hasUnsynced && validData(cached);
-      if (!loaded) {
-        // brand-new account: carry over trips from the old single-file version (once), else start fresh
-        let legacy = null;
-        try { legacy = JSON.parse(localStorage.getItem(LEGACY_KEY) || 'null'); } catch (e) {}
-        if (validData(legacy)) {
-          loaded = legacy;
-          try { localStorage.removeItem(LEGACY_KEY); } catch (e) {}
-        } else {
-          loaded = makeDefaultData();
-        }
-        needPush = true;
-      }
-
-      appData = loaded;
-      try { localStorage.setItem(cacheKey(), JSON.stringify(appData)); } catch (e) {}
-      render();
-      setSyncStatus(serverOk ? 'Saved ✓' : 'Offline');
-      if (needPush && serverOk) { try { localStorage.setItem(dirtyKey(), '1'); } catch (e) {} pushState(); }
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.remove('show');
     }
 
-    function showAuth(message) {
-      currentUser = null;
-      appData = makeDefaultData();
-      document.getElementById('authScreen').classList.add('show');
-      setAuthMode(authMode);
-      if (message) showAuthError(message); else showAuthError('');
+    function switchAuthTab(mode) {
+      authMode = mode === 'login' ? 'login' : 'register';
+      document.getElementById('tabRegisterBtn').classList.toggle('active', authMode === 'register');
+      document.getElementById('tabLoginBtn').classList.toggle('active', authMode === 'login');
+      document.getElementById('authSubmitBtn').textContent =
+        authMode === 'register' ? 'Create Your Account' : 'Welcome Back';
+      document.getElementById('authErrorBox').style.display = 'none';
     }
 
     function showAuthError(msg) {
-      const el = document.getElementById('authError');
-      el.textContent = msg || '';
-      el.style.display = msg ? 'block' : 'none';
+      const box = document.getElementById('authErrorBox');
+      box.textContent = msg;
+      box.style.display = 'block';
     }
 
-    function setAuthMode(mode) {
-      authMode = mode;
-      const login = mode === 'login';
-      document.getElementById('authSub').textContent = login
-        ? 'Log in to see your private trips'
-        : 'Create a free account – your trips stay private to you';
-      document.getElementById('authBtn').textContent = login ? 'Log in' : 'Create account';
-      document.getElementById('authPass').setAttribute('autocomplete', login ? 'current-password' : 'new-password');
-      document.getElementById('authSwitch').innerHTML = login
-        ? 'New here? <a onclick="setAuthMode(\'register\')">Create an account</a>'
-        : 'Already have an account? <a onclick="setAuthMode(\'login\')">Log in</a>';
-    }
+    async function submitAuthForm() {
+      const username = document.getElementById('authUsernameInput').value.trim().toLowerCase();
+      const password = document.getElementById('authPasswordInput').value;
 
-    async function submitAuth(ev) {
-      ev.preventDefault();
-      const username = document.getElementById('authUser').value.trim();
-      const password = document.getElementById('authPass').value;
-      const btn = document.getElementById('authBtn');
-      btn.disabled = true;
-      showAuthError('');
+      if (!/^[a-z0-9_.-]{3,30}$/.test(username)) {
+        showAuthError('Username must be 3–30 characters (letters, numbers, dot, dash, underscore).');
+        return;
+      }
+      if (!password || password.length < 6) {
+        showAuthError('Password must be at least 6 characters.');
+        return;
+      }
+
+      const endpoint = authMode === 'register' ? '/api/register' : '/api/login';
       try {
-        const res = await api('POST', authMode === 'login' ? '/api/login' : '/api/register', { username, password });
-        if (res.ok) {
-          document.getElementById('authPass').value = '';
-          await startApp(res.data.username);
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.username) {
+          currentUser = data.username;
+          try { localStorage.setItem(LOCAL_SESSION_KEY, currentUser); } catch (e) {}
+          closeAuthModal();
+          updateAccountHeaderUI();
+          if (authMode === 'register') {
+            saveState();
+            showToast('Account @' + currentUser + ' created!');
+          } else {
+            await syncFromServer();
+            showToast('Logged in as @' + currentUser);
+          }
+          render();
+          return;
+        }
+        if (res.status === 400 || res.status === 401 || res.status === 409 || res.status === 429) {
+          showAuthError(data.error || 'Authentication failed.');
+          return;
+        }
+      } catch (err) {
+        // Offline / Canvas fallback account handling
+      }
+
+      // Fallback local account store when running without server
+      try {
+        const rawAccounts = localStorage.getItem(LOCAL_ACCOUNTS_KEY);
+        const accounts = rawAccounts ? JSON.parse(rawAccounts) : {};
+        if (authMode === 'register') {
+          if (accounts[username]) {
+            showAuthError('That username is already taken.');
+            return;
+          }
+          accounts[username] = { password };
+          localStorage.setItem(LOCAL_ACCOUNTS_KEY, JSON.stringify(accounts));
+          currentUser = username;
+          localStorage.setItem(LOCAL_SESSION_KEY, currentUser);
+          saveState();
+          closeAuthModal();
+          updateAccountHeaderUI();
+          showToast('Account @' + currentUser + ' created!');
+          render();
         } else {
-          showAuthError((res.data && res.data.error) || 'Something went wrong. Try again.');
+          if (!accounts[username] || accounts[username].password !== password) {
+            showAuthError('Wrong username or password.');
+            return;
+          }
+          currentUser = username;
+          localStorage.setItem(LOCAL_SESSION_KEY, currentUser);
+          if (!loadLocalStateForUser(currentUser)) {
+            appData = createDefaultAppData();
+          }
+          closeAuthModal();
+          updateAccountHeaderUI();
+          showToast('Logged in as @' + currentUser);
+          render();
         }
       } catch (e) {
-        showAuthError('Cannot reach the server. Check your internet connection.');
+        showAuthError('Unable to complete request.');
       }
-      btn.disabled = false;
     }
 
-    async function logout() {
-      let unsynced = false;
-      try { unsynced = !!localStorage.getItem(dirtyKey()); } catch (e) {}
-      if (unsynced) {
-        await pushState();
-        try { unsynced = !!localStorage.getItem(dirtyKey()); } catch (e) {}
-        if (unsynced && !confirm('Some changes are not saved to the server yet and will be lost if you log out. Log out anyway?')) return;
-      }
-      clearTimeout(syncTimer);
-      syncTimer = null;
-      try { await api('POST', '/api/logout', {}); } catch (e) {}
+    async function handleLogout() {
       try {
-        localStorage.removeItem(cacheKey());
-        localStorage.removeItem(dirtyKey());
-        localStorage.removeItem(LAST_USER_KEY);
+        await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' });
       } catch (e) {}
-      document.getElementById('authUser').value = '';
-      showAuth('');
-    }
-
-    async function boot() {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      try { localStorage.removeItem(LOCAL_SESSION_KEY); } catch (e) {}
+      currentUser = null;
+      activeGroupId = '';
+      if (groupPoller) clearInterval(groupPoller);
+      if (!loadLocalStateForUser(null)) {
+        appData = createDefaultAppData();
       }
-      try {
-        const res = await api('GET', '/api/me');
-        if (res.ok) { await startApp(res.data.username); return; }
-        showAuth('');
-      } catch (e) {
-        // no internet: reopen the last user's saved copy
-        let last = null;
-        try { last = localStorage.getItem(LAST_USER_KEY); } catch (err) {}
-        if (last) await startApp(last); else showAuth('You are offline. Connect to the internet to log in.');
-      }
+      updateAccountHeaderUI();
+      render();
+      showToast('Logged out.');
     }
 
     function formatINR(val) {
@@ -873,12 +1145,19 @@
 
     function renameCurrentTrip() {
       const trip = getCurrentTrip();
-      const newTitle = prompt('Enter a name for this Trip / Split:', trip.title);
-      if (newTitle && newTitle.trim()) {
-        trip.title = newTitle.trim();
-        saveState();
-        render();
-      }
+      openCustomDialog({
+        title: 'Rename Trip / Split',
+        showInput: true,
+        defaultValue: trip.title,
+        confirmText: 'Save Name',
+        onConfirm: function(newTitle) {
+          if (newTitle && newTitle.trim()) {
+            trip.title = newTitle.trim();
+            saveState();
+            render();
+          }
+        }
+      });
     }
 
     function openNewTripModal() {
@@ -930,19 +1209,26 @@
     }
 
     function deleteSavedTrip(tripId, event) {
-      event.stopPropagation();
+      if (event) event.stopPropagation();
       if (appData.trips.length <= 1) {
-        alert('You must keep at least 1 trip in the app.');
+        showToast('You must keep at least 1 trip in the app.');
         return;
       }
       const target = appData.trips.find(t => t.id === tripId);
-      if (!confirm('Delete saved trip "' + (target ? target.title : '') + '"?')) return;
-      appData.trips = appData.trips.filter(t => t.id !== tripId);
-      if (appData.activeTripId === tripId) {
-        appData.activeTripId = appData.trips[0].id;
-      }
-      saveState();
-      render();
+      openCustomDialog({
+        title: 'Delete Saved Trip?',
+        message: 'Delete "' + (target ? target.title : 'this trip') + '" permanently?',
+        showInput: false,
+        confirmText: 'Delete',
+        onConfirm: function() {
+          appData.trips = appData.trips.filter(t => t.id !== tripId);
+          if (appData.activeTripId === tripId) {
+            appData.activeTripId = appData.trips[0].id;
+          }
+          saveState();
+          render();
+        }
+      });
     }
 
     function setGroupCount(targetCount) {
@@ -969,52 +1255,63 @@
 
     function promptCustomCount() {
       const trip = getCurrentTrip();
-      const val = prompt('How many people are in this trip? (1 to 100):', trip.members.length);
-      if (val !== null) {
-        const num = parseInt(val, 10);
-        if (!isNaN(num) && num >= 1 && num <= 100) {
-          setGroupCount(num);
+      openCustomDialog({
+        title: 'Set Number of People (1 to 100)',
+        showInput: true,
+        inputType: 'number',
+        defaultValue: trip.members.length,
+        confirmText: 'Apply',
+        onConfirm: function(val) {
+          const num = parseInt(val, 10);
+          if (!isNaN(num) && num >= 1 && num <= 100) {
+            setGroupCount(num);
+          }
         }
-      }
+      });
     }
 
     function renameMember(memberId) {
       const trip = getCurrentTrip();
       const member = trip.members.find(m => m.id === memberId);
       if (!member) return;
-      const newName = prompt('Enter new name for ' + member.name + ':', member.name);
-      if (newName && newName.trim()) {
-        member.name = newName.trim();
-        saveState();
-        render();
-      }
+      openCustomDialog({
+        title: 'Rename ' + member.name,
+        showInput: true,
+        defaultValue: member.name,
+        confirmText: 'Save Name',
+        onConfirm: function(newName) {
+          if (newName && newName.trim()) {
+            member.name = newName.trim();
+            saveState();
+            render();
+          }
+        }
+      });
     }
 
     function render() {
       const trip = getCurrentTrip();
       const { total, share, balances, transfers } = calculateSettlements(trip);
 
-      // Populate top dropdown
       const selector = document.getElementById('tripSelector');
       selector.innerHTML = appData.trips.map(t => {
         const tTotal = t.expenses.reduce((s, e) => s + Number(e.amount || 0), 0);
-        return `<option value="${esc(t.id)}" ${t.id === trip.id ? 'selected' : ''}>📂 ${esc(t.title)} (${formatINR(tTotal)})</option>`;
+        return `<option value="${t.id}" ${t.id === trip.id ? 'selected' : ''}>📂 ${t.title} (${formatINR(tTotal)})</option>`;
       }).join('');
 
-      // Populate Saved Trips Archive List
       document.getElementById('savedTripsCount').textContent = appData.trips.length;
       const savedListEl = document.getElementById('savedTripsList');
       savedListEl.innerHTML = appData.trips.map(t => {
         const tTotal = t.expenses.reduce((s, e) => s + Number(e.amount || 0), 0);
         const isCurrent = t.id === trip.id;
         return `
-          <div class="saved-trip-item ${isCurrent ? 'active-trip' : ''}" onclick="switchTrip('${esc(t.id)}')">
+          <div class="saved-trip-item ${isCurrent ? 'active-trip' : ''}" onclick="switchTrip('${t.id}')">
             <div>
               <div style="font-weight:800;font-size:0.88rem;color:var(--slate-800);">
-                ${isCurrent ? '🟢 ' : '📁 '}${esc(t.title)}
+                ${isCurrent ? '🟢 ' : '📁 '}${t.title}
               </div>
               <div class="saved-trip-meta">
-                ${t.members.length} People • Total: <strong>${formatINR(tTotal)}</strong> • ${esc(t.createdAt || '')}
+                ${t.members.length} People • Total: <strong>${formatINR(tTotal)}</strong> • ${t.createdAt || ''}
               </div>
             </div>
             <div style="display:flex;align-items:center;gap:6px;">
@@ -1052,10 +1349,10 @@
         return `
           <div class="member-card">
             <div class="member-left">
-              <div class="avatar">${esc(b.name.charAt(0).toUpperCase())}</div>
+              <div class="avatar">${b.name.charAt(0).toUpperCase()}</div>
               <div class="member-info">
                 <div class="member-name-row">
-                  <span class="member-name" onclick="renameMember('${b.id}')" title="Tap to rename">${esc(b.name)} ✎</span>
+                  <span class="member-name" onclick="renameMember('${b.id}')" title="Tap to rename">${b.name} ✎</span>
                   <span class="badge ${badgeClass}">${statusText}</span>
                 </div>
                 <div class="member-spent">Total Spent: <strong style="color:var(--slate-800);">${formatINR(b.spent)}</strong></div>
@@ -1071,14 +1368,14 @@
 
       const settlementsContainer = document.getElementById('settlementsContainer');
       if (transfers.length === 0) {
-        settlementsContainer.innerHTML = `<div style="text-align:center;padding:12px;font-size:0.8rem;color:var(--slate-400);">All expenses in "${esc(trip.title)}" are settled or ₹0 spent!</div>`;
+        settlementsContainer.innerHTML = `<div style="text-align:center;padding:12px;font-size:0.8rem;color:var(--slate-400);">All expenses in "${trip.title}" are settled or ₹0 spent!</div>`;
       } else {
         settlementsContainer.innerHTML = transfers.map(t => `
           <div class="transfer-item">
             <div>
-              <strong style="color:var(--rose);">${esc(t.from)}</strong>
+              <strong style="color:var(--rose);">${t.from}</strong>
               <span style="color:var(--slate-400);font-size:0.78rem;margin:0 6px;">pays &rarr;</span>
-              <strong style="color:var(--emerald);">${esc(t.to)}</strong>
+              <strong style="color:var(--emerald);">${t.to}</strong>
             </div>
             <strong style="font-size:0.95rem;">${formatINR(t.amount)}</strong>
           </div>
@@ -1087,15 +1384,15 @@
 
       const historyContainer = document.getElementById('historyContainer');
       if (trip.expenses.length === 0) {
-        historyContainer.innerHTML = `<div style="text-align:center;padding:10px;font-size:0.8rem;color:var(--slate-400);">No expenses in "${esc(trip.title)}" yet. Tap "+ Add Spent" above.</div>`;
+        historyContainer.innerHTML = `<div style="text-align:center;padding:10px;font-size:0.8rem;color:var(--slate-400);">No expenses in "${trip.title}" yet. Tap "+ Add Spent" above.</div>`;
       } else {
         historyContainer.innerHTML = trip.expenses.slice().reverse().map(e => {
           const member = trip.members.find(m => m.id === e.memberId);
           return `
             <div class="log-item">
               <div>
-                <strong>${member ? esc(member.name) : 'Unknown'}</strong>
-                <span style="color:var(--slate-500);font-size:0.78rem;margin-left:6px;">${esc(e.note || 'Expense')}</span>
+                <strong>${member ? member.name : 'Unknown'}</strong>
+                <span style="color:var(--slate-500);font-size:0.78rem;margin-left:6px;">${e.note || 'Expense'}</span>
               </div>
               <div style="display:flex;align-items:center;gap:8px;">
                 <strong>${formatINR(e.amount)}</strong>
@@ -1168,7 +1465,7 @@
     function copySummary() {
       const trip = getCurrentTrip();
       const { total, share, balances, transfers } = calculateSettlements(trip);
-      let lines = [
+      const lines = [
         '*' + trip.title + ' - Expense Summary (' + trip.members.length + ' People)*',
         'Total Spent: ' + formatINR(total),
         'Per Person Share: ' + formatINR(share),
@@ -1185,13 +1482,51 @@
       } else {
         transfers.forEach(t => lines.push('👉 *' + t.from + '* pays *' + t.to + '*: *' + formatINR(t.amount) + '*'));
       }
-      navigator.clipboard.writeText(lines.join('\n'));
+      const text = lines.join('\n');
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(() => {});
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+      }
       const toast = document.getElementById('copyToast');
       toast.style.display = 'block';
       setTimeout(() => { toast.style.display = 'none'; }, 2500);
     }
 
-    boot();
+    // PWA install support. API requests are deliberately not cached by the service worker.
+    let deferredInstallPrompt = null;
+    const installAppBtn = document.getElementById('installAppBtn');
+    window.addEventListener('beforeinstallprompt', (event) => {
+      event.preventDefault();
+      deferredInstallPrompt = event;
+      if (installAppBtn) installAppBtn.style.display = 'inline-flex';
+    });
+    if (installAppBtn) {
+      installAppBtn.addEventListener('click', async () => {
+        if (!deferredInstallPrompt) {
+          alert('To install TripTogether: on Android Chrome, open the browser menu and choose Install app or Add to Home screen. On iPhone, open Share in Safari and choose Add to Home Screen.');
+          return;
+        }
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+        installAppBtn.style.display = 'none';
+      });
+    }
+    window.addEventListener('appinstalled', () => {
+      if (installAppBtn) installAppBtn.style.display = 'none';
+      deferredInstallPrompt = null;
+    });
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('/service-worker.js').catch(err => console.warn('PWA service worker registration failed:', err)));
+    }
+
+    checkSessionOnLoad();
   </script>
 </body>
 </html>

@@ -1,16 +1,18 @@
 {
-  "name": "Trip Splitter",
-  "short_name": "Trip Splitter",
-  "description": "Split trip expenses and see who pays whom",
+  "id": "/",
+  "name": "TripTogether — Travel & Expense Splitter",
+  "short_name": "TripTogether",
+  "description": "Plan trips, share expenses, and settle bills together.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#4f46e5",
-  "theme_color": "#4f46e5",
+  "background_color": "#f5f0fb",
+  "theme_color": "#8066b2",
+  "categories": ["travel", "finance", "lifestyle"],
   "icons": [
-    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
